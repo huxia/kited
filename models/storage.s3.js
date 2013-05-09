@@ -59,7 +59,7 @@ module.exports = function(bucketInfo){
 		s3.client.listObjects({
 		 	Bucket: bucketInfo['storage_config']['bucket'],
 		 	Delimiter: '/',
-		 	Marker: page,
+		 	Marker: page || '',
 		 	MaxKeys: pageSize,
 		 	Prefix: path
 		}).on('complete', function(response){
