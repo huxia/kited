@@ -48,8 +48,6 @@ module.exports = {
  		
 	},
 	'/': function(req, res){
-		console.info('...');
-		console.info(req.currentUser);
 		req.currentUser.listBuckets(function(buckets){
 			res.render('index', {
 				'buckets': buckets

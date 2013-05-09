@@ -1,6 +1,5 @@
-<% layout('layout', {
-	"title": lingua.user.login
-}) -%>
+<% this.title = lingua.user.login;%>
+<% layout('layout') -%>
 <h1><%= lingua.user.login %></h1>
 <form method="POST">
 	<% if (typeof error != 'undefined') {%>
