@@ -1,4 +1,3 @@
-config/buckets/*
 
 lib-cov
 *.seed
@@ -15,3 +14,5 @@ results
 tmp/*
 node_modules/*
 npm-debug.log
+
+thumbnaild

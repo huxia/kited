@@ -1,0 +1,12 @@
+[
+	{
+		"name": "admin",
+		"roles": ["admin","public"],
+		"password": "password"
+	},
+	{
+		"name": "__guest",
+		"roles": ["public"],
+		"password": null
+	}
+]

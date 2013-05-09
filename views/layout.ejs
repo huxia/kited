@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= (typeof(title) != 'undefined') && title ? title + " - " + lingua.title : lingua.title %></title>
+  	<%- renderStyles() %>
+  </head>
+  <body>
+  	<%- renderJs(env) %>
+  	<%- renderJs() %>
+
+<% if(!request.currentUser ||request.currentUser.isGuest()){ %>
+	<a href="/login"><%= lingua.user.login%></a>
+<% }else{ %>
+	<%= lingua.user.greetings(request.currentUser)%> <a href="/logout"><%= lingua.user.logout%></a>
+<% } %>
+    <%- body %>
+  </body>
+</html>

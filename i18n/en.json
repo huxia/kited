@@ -1,0 +1,11 @@
+{
+	"title": "Kited",
+	"go_home": "Go home",
+	"user": {
+		"login": "Sign in",
+		"logout": "Sign out",
+		"greetings": "Hello, {name}",
+		"username_password_mismatch": "Username & password mismatch",
+		"signed_out": "You are signed out"
+	}
+}

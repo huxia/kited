@@ -1,0 +1,4 @@
+<% layout('layout') -%>
+<% for (var i in buckets){%>
+	<a href="/browse/<%= buckets[i].id%>"><%= buckets[i].id%></a>
+<% } %>

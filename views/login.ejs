@@ -1,0 +1,12 @@
+<% layout('layout', {
+	"title": lingua.user.login
+}) -%>
+<h1><%= lingua.user.login %></h1>
+<form method="POST">
+	<% if (typeof error != 'undefined') {%>
+		<div class="error"><%= error %></div>
+	<% } %>
+	<input type="text" name="name" />
+	<input type="password" name="password" />
+	<button type="submit">Login</button>
+</form>
