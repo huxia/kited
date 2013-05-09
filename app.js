@@ -71,7 +71,7 @@ app.configure('production', function(){
 // Routes
 console.log("Routes:");
 var routesFolder = __dirname + '/routes';
-fs.readdirSync(routesFolder).forEach(function(name){
+fs.readdirSync(routesFolder).sort().forEach(function(name){
 	var map = require(routesFolder + '/' + name);
 	console.log(" %s", name);
 	for(var path in map){
