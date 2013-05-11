@@ -1,0 +1,109 @@
+
+
+/* files */
+.file{
+	display: inline-block;
+	*display: inline;
+	width: 100px;
+	height: 100px;
+	vertical-align: top;
+	position: relative;
+	margin: 0 3px 3px 0;
+}
+
+.file a{
+	color: #fff;
+	text-decoration: none;
+	padding: 0;
+	font-weight: lighter;
+	background: transparent;
+	line-height: 1.6em;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+.file-has-image{
+	font-size: 12px;
+	line-height: 12px;
+	color: black;
+}
+.file-has-image a{
+	color: black;
+}
+.file-has-image .extname{
+	display: none;
+}
+.file-has-image .basename{
+	position: absolute;
+	color: black;
+	left: 5px;
+	display: block;
+	overflow: hidden;
+	right: 5px;
+	top: 100px;
+}
+.file-no-image{
+	background: #333;
+}
+.file .basename{
+	word-wrap: break-word;
+	text-overflow: ellipsis;
+}
+.file-type-folder{
+	background: url(/images/folder-background.gif) no-repeat;
+}
+.file-type-folder a{
+	display: table;
+	table-layout:fixed
+}
+.file-type-folder .basename{
+	font-size: 18px;
+	padding: 0 4px;
+	display: table-cell;
+	vertical-align: middle;
+	line-height: 20px;
+}
+.file-type-folder img{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+}
+.file-type-file-no-image{
+	background: url(/images/file-background.gif) no-repeat;
+}
+.file-type-file-no-image .basename{
+	font-size: 18px;
+	display: block;
+	text-align: center;
+	line-height: 96px;
+	padding: 0 4px;
+}
+.file-type-file-no-image .extname{
+	font-weight: bold;
+	font-size: 24px;
+	color: #555555;
+	position: absolute;
+	right: 8px;
+	bottom: 0px;
+	text-transform: uppercase;
+}
+.file-type-file-no-image .extname .dot{
+	display: none;
+}
+
+/* misc */
+#files_loadmore{
+	width: 100%;
+	display: block;
+	text-align: center;
+	visibility:hidden;
+	margin-top: 20px;
+}
+@media screen and (min-width: 600px) {
+	.file {
+		margin: 0 30px 30px 0;
+	}
+}

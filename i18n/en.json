@@ -1,11 +1,17 @@
 {
 	"title": "Kited",
-	"go_home": "Go home",
+	"go_home": "go home",
+	"home": "home",
 	"user": {
-		"login": "Sign in",
-		"logout": "Sign out",
-		"greetings": "Hello, {name}",
-		"username_password_mismatch": "Username & password mismatch",
-		"signed_out": "You are signed out"
+		"name": "name",
+		"password": "password",
+		"login": "sign in",
+		"logout": "sign out",
+		"greetings": "hello, {name}",
+		"username_password_mismatch": "username & password mismatch",
+		"signed_out": "you are signed out"
+	},
+	"file": {
+		"load_more": "load more"
 	}
 }

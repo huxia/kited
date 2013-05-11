@@ -1,0 +1,67 @@
+<% layout('layout') -%>
+<%
+var links = [{
+		name: lingua.home, 
+		url: '/'
+	}];
+if(data.bucket){
+	links.push({
+		name: data.bucket, 
+		url: '/browse/' + data.bucket
+	});
+}
+var fullPath = data.path || '';
+fullPath = fullPath.replace(/\/+$/,'');
+fullPath = fullPath.replace(/^\/+/,'');
+if(fullPath.length){
+	var pathParts = fullPath.split('/');
+	var path = '/browse/' + data.bucket;
+	for(var i in pathParts){
+		var name = pathParts[i];
+		path = path + '/' + name;
+		links.push({
+			"name": name,
+			"url": path
+		});
+	}
+}
+var navigationBarHtml = [];
+for(var i in links){
+	if(navigationBarHtml.length)
+		navigationBarHtml.push(" » ");
+	navigationBarHtml.push("<a href=\"" + links[i].url + "\">" + links[i].name + "</a>");
+}
+block('navigation_bar', navigationBarHtml.join(''))
+%>
+<script type="text/html" id="file_template">
+	<div class="file file-type-<#=h (file.type || "").toLowerCase() #> <#= file.url_thumbnail ? 'file-has-image' : 'file-no-image'  #> file-type-<#=h (file.type || "").toLowerCase() #>-<#= file.url_thumbnail ? 'has-image' : 'no-image'  #>">
+		<a href="<#=h file.url #>" title="<#=h file.name #>">
+		
+			<# if (file.url_thumbnail){ #>
+			<img class="thumbnail" src="<#=h file.url_thumbnail #>" alt="<#=h file.name #>" />
+			<# } #>
+			<span class="basename"><#=h basename(file.name, true) #></span>
+			<# if (file.type == 'File'){ 
+				var ext = extname(file.name);
+				if(ext.length){
+			#>
+			<span class="extname"><span class="dot">.</span><#=h ext #></span>
+			<#  }
+			} #>
+		</a>
+	</div>
+</script>
+
+<script type="text/html" id="files_template">
+	<#
+	for(var i in files){
+		var file = files[i];
+	#><#= tmpl('file_template', { 'file': file }); #><#
+	}
+	#>
+</script>
+<div id="files" class="grid-view"></div>
+<button id="files_loadmore" onclick="loadMore();"><%= lingua.file.load_more%></button>
+<script>
+	appendData(<%- JSON.stringify(data) %>);
+</script>

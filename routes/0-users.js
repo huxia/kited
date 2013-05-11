@@ -47,11 +47,4 @@ module.exports = {
  		}
  		
 	},
-	'/': function(req, res){
-		req.currentUser.listBuckets(function(buckets){
-			res.render('index', {
-				'buckets': buckets
-	 		});
-		});
-	}
 }

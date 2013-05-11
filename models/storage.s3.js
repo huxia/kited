@@ -60,7 +60,7 @@ module.exports = function(bucketInfo){
 		 	Bucket: bucketInfo['storage_config']['bucket'],
 		 	Delimiter: '/',
 		 	Marker: page || '',
-		 	MaxKeys: pageSize,
+		 	MaxKeys: pageSize + 2,
 		 	Prefix: path
 		}).on('complete', function(response){
 
@@ -87,13 +87,13 @@ module.exports = function(bucketInfo){
 			}
 			var data = {
 				'path':  path || '',
-				'files': files,
+				'files': files && files.slice(0, pageSize),
 				'bucket': bucketInfo.id,
-				'page': {
-					'next': response && response.data && response.data.NextMarker,
-					'previous': null
-				},
-				'pageSize': pageSize,
+				'nextPage': files.length > pageSize ? files[pageSize-1].path : null,
+				'previousPage': null,
+				'limit': pageSize,
+				'page': page,
+				'hasMore': files.length > pageSize,
 				'debug': util.inspect(response)
 			};
 			callback(error, data);

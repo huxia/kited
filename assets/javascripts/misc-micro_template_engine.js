@@ -24,6 +24,7 @@
         // Convert the template into pure JavaScript
         str
           .replace(/[\r\t\n]/g, " ")
+          .trim()
           .split("<#").join("\t")
           .replace(/((^|#>)[^\t]*)'/g, "$1\r")
           .replace(/\t=h(.*?)[\s;]*#>/g, "',htmlEscape($1),'")

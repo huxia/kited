@@ -1,18 +1,43 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= (typeof(title) != 'undefined') && title ? (title + " - " + lingua.title) : lingua.title %></title>
-  	<%- renderStyles() %>
-  </head>
-  <body>
-  	<%- renderJs(env) %>
-  	<%- renderJs() %>
-
-<% if(!request.currentUser ||request.currentUser.isGuest()){ %>
-	<a href="/login"><%= lingua.user.login%></a>
-<% }else{ %>
-	<%= lingua.user.greetings(request.currentUser)%> <a href="/logout"><%= lingua.user.logout%></a>
-<% } %>
-    <%- body %>
-  </body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html class="<%=: ua.family|downcase|replace:/ /g,'-'%> <%=: ua.family|downcase|replace:/ /g,'-'%><%= ua.major%> <%=: os.family|downcase|replace:/ /g,'-'%> <%=: os.family|downcase|replace:/ /g,'-'%><%= os.major%> <%=: device.family|downcase|replace:/ /g,'-'%> <%=: device.family|downcase|replace:/ /g,'-'%><%= device.major%>">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<% if (/(ios|android)/i.test(os.family)){ %>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+		<% } %>
+		<meta http-equiv="X-UA-Compatible" content="ie=100">
+		<title><%= (typeof(title) != 'undefined') && title ? (title + " - " + lingua.title) : lingua.title %></title>
+		<%- renderStyles() %>
+		<%-blocks.header%>
+	</head>
+	<body>
+		<%- renderJs(env) %>
+		<%- renderJs() %>
+		<div id="wrapper">
+			<div id="top-bar">
+				<div id="navigation-bar">
+					<% var nb = blocks.navigation_bar; %>
+					<% if (nb){ %>
+					<%-nb%>
+					<% } else {%>
+					<a href="/"><%= lingua.home%></a>
+					<% } %>
+				</div>
+				<div id="current-user">
+					<% if(!request.currentUser ||request.currentUser.isGuest()){ %>
+							<a href="/login"><%= lingua.user.login%></a>
+					<% }else{ %>
+							<%= lingua.user.greetings(request.currentUser)%> <a href="/logout"><%= lingua.user.logout%></a>
+					<% } %>
+				</div>
+			</div>
+			<div id="content">
+				<% if(typeof message != 'undefined' && message) {%>
+					<div id="message" class="<%= typeof error != 'undefined' && error ? 'error' : 'message'%>"><%= message %></div>
+				<% } %>
+				
+				<%- body %>
+			</div>
+		</div>
+	</body>
 </html>

@@ -2,26 +2,47 @@
 var util = require('util');
 var core = require('../models/core');
 var path = require('path');
+var deepExtend = require('deep-extend')
 
 module.exports = {
+	'/': function(req, res){
+		req.currentUser.listBuckets(function(buckets){
+			var files = [];
+			buckets.forEach(function(bucket){
+				files.push({
+					'name': bucket.id,
+					'type': 'Folder',
+					'path': '',
+					'url': '/browse/' + bucket.id
+				});
+			});
+			res.render('files', {
+				'data': {
+					'files': files,
+					'page': null
+				}
+	 		});
+		});
+	},
 	"/browse/:bucket_id/* & /browse/:bucket_id": function(req, res) {
 		function render(err, data){
 			if (err || !data){
 				
 				err = err ? err : {status: 500 };
 				err.message = err.message || 'Unknown error';
-				data = {
-					'error': err.status,
-					'message': err.message
-				};
+				data = data || {};
+
+				
 
 				res.statusCode = err.status;
 			}
 			res.format({
 				'text/html': function(){
-					res.render('browse', {
-						title: path.basename(data.path),
-						'data': data
+					res.render('files', {
+						title: path.basename(data.path).replace('/', ''),
+						'data': data,
+						'error': err && err.status || false,
+						'message': err && err.message || false
 					})
 				},
 				'application/json': function(){
@@ -36,7 +57,12 @@ module.exports = {
 		if(!req.currentUser.ownBucket(bucket)){
 			render({
 				status: 401,
-				message: 'Permission denied'
+				message: 'Permission denied',
+			}, {
+				'bucket': bucket.id,
+				path: req.params[0] || '',
+				page: req.query.page,
+				limit: req.query.limit,
 			});
 			return;
 		}
@@ -46,7 +72,8 @@ module.exports = {
 			page: req.query.page,
 			limit: req.query.limit,
 			host: req.host,
-			port: req.app.settings.port
+			port: req.app.settings.port,
+			request: req
 		}, render);
 	}
 };

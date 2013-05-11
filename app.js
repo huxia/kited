@@ -32,12 +32,7 @@ app.configure(function(){
 	app.use(express.methodOverride());
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'your secret here' }));
-	app.use(function (req, res, next) {
-	    res.locals.request = req;
-	    res.locals.response = res;
-	    res.locals.app = app;
-	    next();
-	});
+	app.use(core.expressShortcuts);
 	app.use(app.router);
 	app.use('/images', express.static(__dirname + '/assets/images'));
 	app.use(express.static(__dirname + '/tmp/public'));

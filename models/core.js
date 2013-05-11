@@ -11,7 +11,45 @@ var storage = require('./storage')
 	, thumbnaild = require('thumbnaild')
 	, path = require('path')
 	, ncp = require("ncp").ncp
+	, deepExtend = require('deep-extend')
+	, uaParser = require('ua-parser')
 	;
+exports.expressShortcuts = function(req, res, next){
+	// shortcuts
+	res.locals.request = req;
+	res.locals.response = res;
+	res.locals.app = req.app;
+	// ua
+	var tablet = false;
+	var phone = false;
+	var p = uaParser.parse(req.headers['user-agent']);
+	if(/android/i.test(p.os)){
+		if(/mobile/.test(req.headers['user-agent'])){
+			phone = true;
+			tablet = false;
+		}else{
+			phone = false;
+			tablet = true;
+		}
+	}else if(/ios/i.test(p.os)){
+		if(/ipad/.test(p.device) || /tv/.test(p.device)){
+			tablet = true;
+			phone = false;
+		}else{
+			tablet = false;
+			phone = true;
+		}
+	}
+	res.locals.ua = req.ua = p.ua;
+	res.locals.os = req.os = p.os;
+	res.locals.device = req.device = p.device;
+	res.locals.is = req.is = {
+		"phone": phone,
+		"tablet": tablet
+	};
+	
+	next();
+};
 function mkdirSync(dir){
 	if (!fs.existsSync(dir))
 		fs.mkdirSync(dir);
@@ -77,13 +115,13 @@ function getUrlSync(bucket, path, schema, host, port){
 		if (!h || h == 'localhost'){
 			h = host;
 		}
-		url = 'http://' + h + ':' + config['external']['port'] + '/' + urlSchema + '/' + thumbnaildBucket + '/' + path;
+		url = 'http://' + h + ':' + config['external']['port'] + '/' + encodeURIComponent(urlSchema) + '/' + encodeURIComponent(thumbnaildBucket) + '/' + encodeURI(path);
 	}else{
 		thumbnaildBucket = thumbnaild.encodeBucket(bucket['id'], {
 			"storage": bucket['storage'],
 			"storage_config": bucket['storage_config']
 		}, config['shared_secret']);
-		url = 'http://' + host + ':' + port + '/thumbnaild/' + schema + '/' + thumbnaildBucket + '/' + path;
+		url = 'http://' + host + ':' + port + '/thumbnaild/' + encodeURIComponent(schema) + '/' + encodeURIComponent(thumbnaildBucket) + '/' + encodeURI(path);
 	}
 
 	if (config['shared_secret'] && config['shared_secret'].length){
@@ -95,17 +133,19 @@ function getUrlSync(bucket, path, schema, host, port){
 exports.requestFolder = function(objectInfo, callback){
 
 	var bucket = objectInfo._bucket ? objectInfo._bucket : loadBucket(objectInfo.bucket);
-	if (!bucket){
-		callback({status: 500, message: 'Bucket not found: ' + objectInfo.bucket}, null);
-		return;
-	}
-
-	var s = storage(bucket);
-	s.list(objectInfo.path, objectInfo.page, objectInfo.limit || 50, function(err, data){
-		if(err || !data){
-			callback({status: 404, message: err || 'unknown listing error'}, null);
-			return;
+	var cb = function(err, data){
+		if(!data && !err){
+			err = 'unknown error';
 		}
+		if(!data){
+			data = {};
+		}
+		data = deepExtend(data, {
+			bucket: bucket && bucket.id || null,
+			path: objectInfo.path,
+			page: objectInfo.page,
+			limit: objectInfo.limit,
+		});
 		if(data.files) {
 			for(var i in data.files){
 				var file = data.files[i];
@@ -124,6 +164,29 @@ exports.requestFolder = function(objectInfo, callback){
 				}
 			}
 		}
-		callback(null, data);
+		callback(err, data);
+	};
+	if (!bucket){
+		cb({status: 500, message: 'Bucket not found: ' + objectInfo.bucket}, null);
+		return;
+	}
+	if(!objectInfo.limit){
+		if (objectInfo.request.is.phone) {
+			objectInfo.limit = 21;
+		}else {
+			objectInfo.limit = 50;
+		}
+	}
+	if(objectInfo.limit > 50)
+		objectInfo.limit = 50;
+	
+
+	var s = storage(bucket);
+	s.list(objectInfo.path, objectInfo.page, objectInfo.limit || 50, function(err, data){
+		if(err || !data){
+			cb({status: 404, message: err || 'unknown listing error'}, null);
+			return;
+		}
+		cb(null, data);
 	});
 }

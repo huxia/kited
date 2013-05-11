@@ -45,7 +45,7 @@ exports.login = function(name, password, callback){
 	var user = null;
 	for(var i in users){
 		var u = users[i];
-		if(u['name'] === name && u['password'] === password){
+		if(u['name'].toLowerCase() === name.toLowerCase() && u['password'] === password){
 			user = u;
 			break;
 		}
