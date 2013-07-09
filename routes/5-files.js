@@ -62,7 +62,7 @@ module.exports = {
 				'bucket': bucket.id,
 				path: req.params[0] || '',
 				page: req.query.page,
-				limit: req.query.limit,
+				limit: parseInt(req.query.limit),
 			});
 			return;
 		}
@@ -70,7 +70,7 @@ module.exports = {
 			'_bucket': bucket,
 			path: req.params[0] || '',
 			page: req.query.page,
-			limit: req.query.limit,
+			limit: parseInt(req.query.limit),
 			host: req.app.settings['external-host'] || req.host,
 			port: req.app.settings['external-port'] || req.app.settings.port,
 			request: req

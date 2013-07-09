@@ -60,7 +60,7 @@ module.exports = function(bucketInfo){
 		 	Bucket: bucketInfo['storage_config']['bucket'],
 		 	Delimiter: '/',
 		 	Marker: page || '',
-		 	MaxKeys: pageSize + 2,
+		 	MaxKeys: parseInt(pageSize) + 2,
 		 	Prefix: path
 		}).on('complete', function(response){
 
