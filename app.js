@@ -7,6 +7,8 @@ var settings = deepExtend({
 	home: '.'
 }, argv);
 
+
+
 global.KATED_HOME = path.resolve(settings['home']);
 console.info('Kited started at ' + KATED_HOME);
 var express = require('express')
@@ -80,6 +82,11 @@ fs.readdirSync(routesFolder).sort().forEach(function(name){
 app.locals.env = app.settings.env;
 
 core.setupThumbnaild(app, function(){
+	if(settings['external-host']){
+		app.settings['external-host'] = settings['external-host']; 
+		app.settings['external-port'] = settings['external-port'] || 80;
+		console.log("External host: %s:%d", app.settings['external-host'], app.settings['external-port']);
+	}
 	app.listen(app.settings.port = settings['port']);
 	console.log("Express server listening on port %d in %s mode", settings['port'], app.settings.env);
 });

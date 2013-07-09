@@ -71,8 +71,8 @@ module.exports = {
 			path: req.params[0] || '',
 			page: req.query.page,
 			limit: req.query.limit,
-			host: req.host,
-			port: req.app.settings.port,
+			host: req.app.settings['external-host'] || req.host,
+			port: req.app.settings['external-port'] || req.app.settings.port,
 			request: req
 		}, render);
 	}
