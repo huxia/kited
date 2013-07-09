@@ -38,7 +38,7 @@ block('navigation_bar', navigationBarHtml.join(''))
 		<a href="<#=h file.url #>" title="<#=h file.name #>">
 		
 			<# if (file.url_thumbnail){ #>
-			<img class="thumbnail" src="<#=h file.url_thumbnail #>" alt="<#=h file.name #>" />
+			<img class="thumbnail" src="/images/file-background.gif" data-src="<#=h file.url_thumbnail #>" alt="<#=h file.name #>" />
 			<# } #>
 			<span class="basename"><#=h basename(file.name, true) #></span>
 			<# if (file.type == 'File'){ 

@@ -2,6 +2,7 @@ var nextPageURL = null;
 function appendData(data){
 	var html = tmpl('files_template', { 'files': data.files });
 	$("#files").append(html);
+	$("#files img.thumbnail").unveil();
 	$("#files").toggleClass("empty", !$("#files .file").length);
 	if(!data.hasMore || !data.nextPage || !data.limit){
 		$('#files_loadmore').css('visibility', 'hidden');
