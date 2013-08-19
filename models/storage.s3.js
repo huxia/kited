@@ -70,18 +70,19 @@ module.exports = function(bucketInfo){
 			}
 			console.info(response);
 			console.log('s3 list done: error: ' + error);
+			var hiddenRegex = bucketInfo['hidden_regex'] ? new RegExp(bucketInfo['hidden_regex'], 'i') : /.KITED_HIDDEN/;
 			var files = [];
 			if(response && response.data && response.data.CommonPrefixes){
 				response.data.CommonPrefixes.forEach(function(prefix){
 					var file = fileFromPrefix(prefix, path);
-					if(file && file.name && file.name.length)
+					if(file && file.name && file.name.length && !hiddenRegex.test(file.name))
 						files.push(file);
 				});
 			}
 			if(response && response.data && response.data.Contents){
 				response.data.Contents.forEach(function(object){
 					var file = fileFromObject(object, path);
-					if(file && file.name && file.name.length)
+					if(file && file.name && file.name.length && !hiddenRegex.test(file.name))
 						files.push(file);
 				});
 			}
